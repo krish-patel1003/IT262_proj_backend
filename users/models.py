@@ -17,3 +17,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    def get_full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
+
+class StudentProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    rollno = models.CharField(max_length=10)
+    medical_history = models.TextField()
+
+    def __str__(self):
+        return f'{self.user.get_full_name} - {self.rollno}'

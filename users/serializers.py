@@ -3,6 +3,7 @@ from .models import User
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = (
@@ -27,3 +28,7 @@ class LoginSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'password')
         extra_kwargs = {'password': {'write_only': True}}
+
+class LogoutSerializer(serializers.Serializer):
+
+    refresh_token = serializers.CharField(max_length=255)

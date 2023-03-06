@@ -1,25 +1,26 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from django.conf import settings
 from django.middleware import csrf
 from rest_framework import status
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import RegisterSerializer, LoginSerializer, LogoutSerializer
 from .utils import get_tokens_for_user
 from rest_framework import permissions
 
 
-class HomeView(APIView):
+class HomeView(GenericAPIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        return Response({"Yes I see u r authenticated"})
+        return Response({"msg":"Yes I see u r authenticated", "user":request.user.email})
 
 
-class RegisterView(APIView):
+class RegisterView(GenericAPIView):
 
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
@@ -33,7 +34,7 @@ class RegisterView(APIView):
         return Response({"data": serializer.data, "mssg": "user created"}, status=status.HTTP_201_CREATED)
 
 
-class LoginView(APIView):
+class LoginView(GenericAPIView):
     serializer_class = LoginSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -68,7 +69,9 @@ class LoginView(APIView):
             return Response({"Invalid": " Invalid email or password"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class LogoutView(APIView):
+class LogoutView(GenericAPIView):
+
+    serializer_class = LogoutSerializer
 
     def post(self, request, format=None):
         refresh_token = request.data['refresh_token']
