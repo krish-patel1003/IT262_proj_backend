@@ -21,3 +21,5 @@ class SymptomViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated, SymptomPermission, )
 
 
+
+
