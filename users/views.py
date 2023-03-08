@@ -10,6 +10,7 @@ from rest_framework import status
 from .serializers import RegisterSerializer, LoginSerializer, LogoutSerializer
 from .utils import get_tokens_for_user
 from rest_framework import permissions
+from .models import StudentProfile
 
 
 class HomeView(GenericAPIView):
@@ -29,6 +30,7 @@ class RegisterView(GenericAPIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
+        student = StudentProfile.objects.create(user=data.id)
         serializer.save()
 
         return Response({"data": serializer.data, "mssg": "user created"}, status=status.HTTP_201_CREATED)
