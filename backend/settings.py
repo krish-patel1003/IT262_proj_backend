@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-!zm2q^3jyh3e!2^3(033o%9#3qk3ktl!++n6rra_*sl2xv8cje
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "it262-proj.onrender.com"]
+ALLOWED_HOSTS = ['127.0.0.1', 'it262-proj.onrender.com']
 
 
 # Application definition
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'users',
     'appointments',
+    'notifications',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
