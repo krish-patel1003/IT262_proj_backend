@@ -30,10 +30,16 @@ class RegisterView(GenericAPIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
-        student = StudentProfile.objects.create(user=data.id)
-        serializer.save()
 
-        return Response({"data": serializer.data, "mssg": "user created"}, status=status.HTTP_201_CREATED)
+        if "is_doctor" in serializer.data.keys():
+            serializer.save()
+            return Response(
+                {"data": serializer.data, "mssg": "Doctor created"}, status=status.HTTP_201_CREATED)
+        serializer.save()
+        student = StudentProfile.objects.create(user=serializer.instance)
+
+        return Response(
+            {"data": serializer.data, "mssg": "user created"}, status=status.HTTP_201_CREATED)
 
 
 class LoginView(GenericAPIView):

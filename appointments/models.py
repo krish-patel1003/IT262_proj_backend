@@ -30,7 +30,7 @@ class Appointment(models.Model):
     date = models.DateField()
     symptoms = models.ManyToManyField(Symptom, related_name='symptoms')
     extra_symptoms = models.TextField()
-    diagnose = models.TextField()
+    diagnose = models.TextField(blank=True)
     prescription_id = models.ForeignKey(Prescription,  null=True, on_delete=models.SET_NULL)
     status =  models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
 

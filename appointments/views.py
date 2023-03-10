@@ -21,6 +21,8 @@ from .permissions import (
 from rest_framework import status
 from users.models import StudentProfile
 from django.db.models import Q
+from .signals import appointment_attended
+from datetime import date
 # Create your views here.
 
 class appointmentsHome(GenericAPIView):
@@ -44,14 +46,12 @@ class AppointmentViewSet(ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         data = request.data
-        prescription = Prescription.objects.create()
         student = StudentProfile.objects.get(user=request.user)
-        data['prescription_id'] = prescription.id
         data["student"] = student.id
-        print(data)
         serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        # print(serializer.validated_data)
+        if serializer.is_valid():
+            prescription = Prescription.objects.create()
+            serializer.data['prescription_id'] = prescription.id
         serializer.save()
 
         return Response(
@@ -73,6 +73,34 @@ class AppointmentViewSet(ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response({"data":serializer.data, "msg":"List of Appointments"})
 
+    def partial_update(self, request, *args, **kwargs):
+
+        appointment = Appointment.objects.get(id=kwargs["pk"])
+        _status = request.data["status"]
+
+        if _status:
+            if appointment.status != _status:
+                appointment.status = _status
+                appointment.save()
+
+                all_next_appointments = Appointment.objects.filter(
+                    date=date.today(), status="Pending")
+                
+                appointment_attended.send(
+                    sender=Appointment, 
+                    appointment_attended=appointment, 
+                    all_next_appointments=all_next_appointments,
+                    immediate_next=all_next_appointments.first() 
+                    )
+
+                return Response(
+                    {"status": f"Appointment {appointment.id} is attended"}, status=status.HTTP_200_OK)
+            
+            return Response({"status":f"Appointment {appointment.id} already has same status"})
+
+        return Response(
+            {"status":f"Appointment {appointment.id} Updated"}, status=status.HTTP_200_OK)
+            
 
 class PriscriptionViewSet(ModelViewSet):
 

@@ -68,7 +68,7 @@ class PrescriptionPermission(BasePermission):
             return True
 
         if request.method in ("PUT", "PATCH"):
-            self.message = "Only Doctors or Admin can update appointment"
+            self.message = "Only Doctors or Admin can update an appointment"
             return request.user.is_doctor or request.user.is_superuser
 
         if request.method == "DELETE":
