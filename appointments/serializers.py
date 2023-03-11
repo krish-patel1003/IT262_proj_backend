@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Symptom, Prescription, Appointment
+from users.models import StudentProfile
 
 
 class SymptomSerializer(ModelSerializer):
@@ -28,7 +29,15 @@ class AppointmentSerializer(ModelSerializer):
             "prescription_id", 
             "status"
         )
-        # extra_kwargs = {
-        #     "student":{"read_only":True},
-        #     "prescription_id":{"read_only":True}
-        # }
+        extra_kwargs = {
+            "student":{"read_only":True}
+        }
+
+    def create(self, attrs):
+        super().validate(attrs)
+        student = StudentProfile.objects.get(user=self.context["request"].user)
+        attrs["student"] = student
+        prescription = Prescription.objects.create()
+        attrs['prescription_id'] = prescription
+
+        return super().validate(attrs)

@@ -23,6 +23,7 @@ from users.models import StudentProfile
 from django.db.models import Q
 from .signals import appointment_attended
 from datetime import date
+from rest_framework.decorators import action
 # Create your views here.
 
 class appointmentsHome(GenericAPIView):
@@ -46,12 +47,8 @@ class AppointmentViewSet(ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         data = request.data
-        student = StudentProfile.objects.get(user=request.user)
-        data["student"] = student.id
         serializer = self.get_serializer(data=data)
-        if serializer.is_valid():
-            prescription = Prescription.objects.create()
-            serializer.data['prescription_id'] = prescription.id
+        serializer.is_valid(raise_exception=True)
         serializer.save()
 
         return Response(
@@ -59,22 +56,23 @@ class AppointmentViewSet(ModelViewSet):
     
     
     def list(self, request, *args, **kwargs):
-        status = request.GET.get("status")
+        # GET
+        _status = request.GET.get("status")
         from_date = request.GET.get("from_date")
         to_date = request.GET.get("to_date")
 
-        if status:
-            self.queryset = self.queryset.filter(status=status)
+        if _status:
+            self.queryset = self.queryset.filter(status=_status)
         if from_date:
             self.queryset = self.queryset.filter(Q(date__gte=from_date))
         if to_date:
             self.queryset = self.queryset.filter(Q(date__lte=to_date))
         
         serializer = self.get_serializer(self.queryset, many=True)
-        return Response({"data":serializer.data, "msg":"List of Appointments"})
+        return Response({"data":serializer.data, "msg":"List of Appointments"}, status=status.HTTP_200_OK)
 
     def partial_update(self, request, *args, **kwargs):
-
+        # PATCH
         appointment = Appointment.objects.get(id=kwargs["pk"])
         _status = request.data["status"]
 

@@ -36,6 +36,7 @@ class Appointment(models.Model):
 
 
     class Meta:
+        ordering = ('id',)
         constraints = [
             CheckConstraint(
                 check =  Q(date__lt=datetime.now() + timedelta(days=17)),
