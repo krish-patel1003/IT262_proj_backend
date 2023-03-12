@@ -22,10 +22,10 @@ from rest_framework import status
 from users.models import StudentProfile
 from django.db.models import Q
 from .signals import appointment_attended
-from datetime import datetime
+from datetime import datetime, date
 from rest_framework.decorators import action
 from backend.settings import APPOINTMENT_SETTINGS
-from .utils import parse_date
+from .utils import parse_date, get_leaves
 # Create your views here.
 
 class appointmentsHome(GenericAPIView):
@@ -51,9 +51,15 @@ class AppointmentViewSet(ModelViewSet):
 
         data = request.data
         _date = parse_date(request.data["date"])
+        print("leave_dates:", get_leaves())
+        for leave in get_leaves():
+            if date(*_date) >= leave[0] and date(*_date) <= leave[1]:
+                return Response(
+                    {"msg":"Doctor is on leave, can't book appointment"}, status=status.HTTP_403_FORBIDDEN)
+
         max = APPOINTMENT_SETTINGS["max_daily_limit"]
         current_day_appointments = Appointment.objects.filter(
-            date=datetime(_date[0], _date[1], _date[2]))
+            date=date(*_date))
         print(current_day_appointments)
         # User's current booking
         user = request.user
