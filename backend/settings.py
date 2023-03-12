@@ -198,3 +198,7 @@ SIMPLE_JWT = {
     'AUTH_COOKIE_SAMESITE': 'Lax'
     # This can 'Lax', 'Strict', or None to disable the flag
 }
+
+APPOINTMENT_SETTINGS = {
+    "max_daily_limit": 2
+}

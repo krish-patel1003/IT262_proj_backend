@@ -22,8 +22,10 @@ from rest_framework import status
 from users.models import StudentProfile
 from django.db.models import Q
 from .signals import appointment_attended
-from datetime import date
+from datetime import datetime
 from rest_framework.decorators import action
+from backend.settings import APPOINTMENT_SETTINGS
+from .utils import parse_date
 # Create your views here.
 
 class appointmentsHome(GenericAPIView):
@@ -46,7 +48,25 @@ class AppointmentViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated, AppointmentPremission, )
     
     def create(self, request, *args, **kwargs):
+
         data = request.data
+        _date = parse_date(request.data["date"])
+        max = APPOINTMENT_SETTINGS["max_daily_limit"]
+        current_day_appointments = Appointment.objects.filter(
+            date=datetime(_date[0], _date[1], _date[2]))
+        print(current_day_appointments)
+        # User's current booking
+        user = request.user
+        student = StudentProfile.objects.get(user=user)
+        students_today_appointment = current_day_appointments.filter(student=student)
+        if students_today_appointment.count() >= 1:
+            return Response(
+                {"msg":"The User already has a appointment booked for today"}, status=status.HTTP_403_FORBIDDEN)
+        # Check max_daily_limit
+        if current_day_appointments.count() >= max:
+            return Response({"msg":"Today's Booking is full"}, status=status.HTTP_403_FORBIDDEN)
+        
+
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -82,7 +102,7 @@ class AppointmentViewSet(ModelViewSet):
                 appointment.save()
 
                 all_next_appointments = Appointment.objects.filter(
-                    date=date.today(), status="Pending")
+                    date=appointment.date, status="Pending")
                 
                 appointment_attended.send(
                     sender=Appointment, 
