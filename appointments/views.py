@@ -26,6 +26,7 @@ from datetime import datetime, date
 from rest_framework.decorators import action
 from backend.settings import APPOINTMENT_SETTINGS
 from .utils import parse_date, get_leaves
+from django.core.serializers import serialize
 # Create your views here.
 
 class appointmentsHome(GenericAPIView):
@@ -75,7 +76,15 @@ class AppointmentViewSet(ModelViewSet):
 
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+
+        try:
+            serializer.save()
+        except Exception as e:
+            return Response(
+                {"error":
+                 "Integrity Error, Check Constraint failed, You cannot book more than 2 weeks in advanced."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         return Response(
             {"data":serializer.data, "msg":"Appointment created."}, status=status.HTTP_201_CREATED)
@@ -99,29 +108,46 @@ class AppointmentViewSet(ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         # PATCH
-        appointment = Appointment.objects.get(id=kwargs["pk"])
+        try:
+            appointment = Appointment.objects.get(id=kwargs["pk"])
+        except Appointment.DoesNotExist:
+            return Response({"error":"Invalid appointment id"},status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(appointment, data=request.data, partial=True)
         _status = request.data["status"]
 
+
         if _status:
-            if appointment.status != _status:
-                appointment.status = _status
-                appointment.save()
-
-                all_next_appointments = Appointment.objects.filter(
-                    date=appointment.date, status="Pending")
-                
-                appointment_attended.send(
-                    sender=Appointment, 
-                    appointment_attended=appointment, 
-                    all_next_appointments=all_next_appointments,
-                    immediate_next=all_next_appointments.first() 
-                    )
-
-                return Response(
-                    {"status": f"Appointment {appointment.id} is attended"}, status=status.HTTP_200_OK)
+            if appointment.status == "Pending" and appointment.status != _status:  
+                print("status changing from pending to attended") 
+                # Creating prescription
+                prescription = Prescription.objects.create()
+                serializer.initial_data["prescription_id"] = prescription.id
+                if serializer.is_valid():
+                    serializer.save()
+                    # To Notify Next Patients
+                    all_next_appointments = Appointment.objects.filter(
+                        date=appointment.date, status="Pending")
+                    
+                    appointment_attended.send(
+                        sender=Appointment, 
+                        appointment_attended=appointment, 
+                        all_next_appointments=all_next_appointments,
+                        immediate_next=all_next_appointments.first() 
+                        )
+                    print(dir(appointment))
+                    return Response(
+                        {
+                        "status": f"Appointment {appointment.id} is attended",
+                        "data": serializer.data
+                        }, 
+                        status=status.HTTP_200_OK)
+                else:
+                    return Response({"error":"Invalid input"}, status=status.HTTP_400_BAD_REQUEST)
             
-            return Response({"status":f"Appointment {appointment.id} already has same status"})
-
+            return Response(
+                {"status":f"Appointment {appointment.id} already has same status"}, 
+                status=status.HTTP_200_OK)
+        
         return Response(
             {"status":f"Appointment {appointment.id} Updated"}, status=status.HTTP_200_OK)
             
@@ -131,5 +157,8 @@ class PriscriptionViewSet(ModelViewSet):
     serializer_class = PrescriptionSerializer
     queryset = Prescription.objects.all()
     permission_classes = (IsAuthenticated, PrescriptionPermission, )
+
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
 

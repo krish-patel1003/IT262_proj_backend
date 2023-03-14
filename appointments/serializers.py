@@ -36,8 +36,6 @@ class AppointmentSerializer(ModelSerializer):
     def create(self, attrs):
         student = StudentProfile.objects.get(user=self.context["request"].user)
         attrs["student"] = student
-        prescription = Prescription.objects.create()
-        attrs['prescription_id'] = prescription
         super().validate(attrs)
 
         return super().create(attrs)
