@@ -18,7 +18,7 @@ class NoticeViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, NoticePermission]
 
     def create(self, request, *args, **kwargs):
-        
+        print(request.data)
         data = request.data
         on_leave_from = date(*parse_date(data["on_leave_from"]))
         on_leave_till = date(*parse_date(data["on_leave_till"]))

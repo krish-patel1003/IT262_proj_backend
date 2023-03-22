@@ -31,6 +31,7 @@ class RegisterView(GenericAPIView):
         serializer = self.serializer_class(data=data)
 
         if "is_doctor" in request.data.keys():
+            serializer.initial_data["is_doctor"] = True
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(

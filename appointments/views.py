@@ -134,7 +134,6 @@ class AppointmentViewSet(ModelViewSet):
                         all_next_appointments=all_next_appointments,
                         immediate_next=all_next_appointments.first() 
                         )
-                    print(dir(appointment))
                     return Response(
                         {
                         "status": f"Appointment {appointment.id} is attended",
