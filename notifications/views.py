@@ -38,7 +38,7 @@ class NoticeViewSet(ModelViewSet):
             else:
                 print("Leave declared in advanced")
         
-        return super().create(self, request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
 
     
