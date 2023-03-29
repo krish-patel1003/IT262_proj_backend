@@ -206,6 +206,6 @@ APPOINTMENT_SETTINGS = {
     "max_daily_limit": 2
 }
 CORS_ALLOWED_ORIGINS_ALL = True
-CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = ['http://*.*', "https://*.*"]
+CORS_ALLOWED_ORIGINS = [ 'http://localhost:3000', 'http://localhost:5500']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://localhost:5500']
