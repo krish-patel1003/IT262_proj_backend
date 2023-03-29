@@ -16,7 +16,7 @@ from .models import StudentProfile
 class HomeView(GenericAPIView):
 
     def get(self, request, format=None):
-        return Response({"msg":"Yes I see u r authenticated", "user":request.user.email})
+        return Response({"msg":"Yes I see u r authenticated"})
 
 
 class RegisterView(GenericAPIView):
