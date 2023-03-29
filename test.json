@@ -1,0 +1,53 @@
+Student Register
+
+{
+  "email": "test0@test.com",
+  "password": "testing321",
+  "first_name": "Krish",
+  "last_name": "Patel",
+  "phone": "1234567890"
+}
+
+{
+  "email": "test1@test.com",
+  "password": "testing321",
+  "first_name": "Dharmik",
+  "last_name": "Jethva",
+  "phone": "0987654321"
+}
+
+{
+  "email": "test2@test.com",
+  "password": "testing321",
+  "first_name": "Ved",
+  "last_name": "Vaghela",
+  "phone": "1029384756"
+}
+
+{
+  "email": "test3@test.com",
+  "password": "testing321",
+  "first_name": "Deepak",
+  "last_name": "Gohil",
+  "phone": "8935987245"
+}
+
+{
+  "email": "test4@test.com",
+  "password": "testing321",
+  "first_name": "Rushabh",
+  "last_name": "Babre",
+  "phone": "7894562685"
+}
+
+
+Doctor Register
+
+{
+  "email": "test0@doc.com",
+  "password": "testing321",
+  "first_name": "Doc",
+  "last_name": "0",
+  "phone": "1029384756",
+
+}

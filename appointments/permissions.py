@@ -67,7 +67,7 @@ class PrescriptionPermission(BasePermission):
         if request.method == "POST":
             self.message = "prescription_id is auto added to appointment."
             return False
-        if request.method in ("PUT", "PATCH"):
+        if request.method == 'PATCH':
             self.message = "Only Doctors or Admin can update an appointment"
             return request.user.is_doctor or request.user.is_superuser
         return True
@@ -80,3 +80,5 @@ class PrescriptionPermission(BasePermission):
         if request.method == "DELETE":
             self.message = "The student who created appointment can only delete it."
             return (obj.student.user == request.user) or request.user.is_superuser
+    
+        return request.user.is_doctor or request.user.is_superuser

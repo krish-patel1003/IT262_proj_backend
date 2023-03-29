@@ -157,7 +157,5 @@ class PriscriptionViewSet(ModelViewSet):
     queryset = Prescription.objects.all()
     permission_classes = (IsAuthenticated, PrescriptionPermission, )
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
 
 

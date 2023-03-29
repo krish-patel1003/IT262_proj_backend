@@ -31,11 +31,12 @@ class RegisterView(GenericAPIView):
         serializer = self.serializer_class(data=data)
 
         if "is_doctor" in request.data.keys():
-            serializer.initial_data["is_doctor"] = True
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(
-                {"data": serializer.data, "mssg": "Doctor created"}, status=status.HTTP_201_CREATED)
+            if serializer.is_valid():
+                serializer.validated_data["is_doctor"] = True
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response(
+                    {"data": serializer.data, "mssg": "Doctor created"}, status=status.HTTP_201_CREATED)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         student = StudentProfile.objects.create(user=serializer.instance)
