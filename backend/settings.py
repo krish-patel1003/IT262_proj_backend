@@ -207,5 +207,5 @@ APPOINTMENT_SETTINGS = {
 }
 CORS_ALLOWED_ORIGINS_ALL = True
 
-CORS_ALLOWED_ORIGINS = [ 'http://localhost:3000', 'http://localhost:5500']
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://localhost:5500']
+CORS_ALLOWED_ORIGINS = [ 'http://localhost:3000', 'http://localhost:5500', 'https://web-production-d445c.up.railway.app']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://localhost:5500', 'https://web-production-d445c.up.railway.app']
