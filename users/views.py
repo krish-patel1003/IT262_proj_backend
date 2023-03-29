@@ -15,8 +15,6 @@ from .models import StudentProfile
 
 class HomeView(GenericAPIView):
 
-    permission_classes = [permissions.IsAuthenticated]
-
     def get(self, request, format=None):
         return Response({"msg":"Yes I see u r authenticated", "user":request.user.email})
 
