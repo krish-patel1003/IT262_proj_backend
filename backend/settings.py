@@ -204,7 +204,7 @@ SIMPLE_JWT = {
 APPOINTMENT_SETTINGS = {
     "max_daily_limit": 2
 }
-
+CORS_ALLOWED_ORIGINS_ALL = True
 CORS_ALLOWED_ORIGINS = [
-"http://127.0.0.1:3000", "*"
+"http://127.0.0.1:3000", "http://*.*"
 ]
