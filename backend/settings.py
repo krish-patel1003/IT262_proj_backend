@@ -28,8 +28,9 @@ SECRET_KEY = 'django-insecure-!zm2q^3jyh3e!2^3(033o%9#3qk3ktl!++n6rra_*sl2xv8cje
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['127.0.0.1', 'https://web-production-d445c.up.railway.app']
+CORS_ALLOWED_ORIGINS = [ 'http://127.0.0.1:3000', 'http://127.0.0.1:5500']
+CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000', 'http://127.0.0.1:5500']
 
 # Application definition
 
@@ -205,8 +206,5 @@ SIMPLE_JWT = {
 APPOINTMENT_SETTINGS = {
     "max_daily_limit": 2
 }
-CORS_ALLOWED_ORIGINS_ALL = True
 
-CORS_ALLOWED_ORIGINS = [ 'http://localhost:3000', 'http://localhost:5500', 'https://web-production-d445c.up.railway.app']
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://localhost:5500', 'https://web-production-d445c.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://localhost:5500', 'https://web-production-d445c.up.railway.app']
+CORS_ALLOWED_ORIGINS_ALL = True
