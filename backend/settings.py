@@ -14,6 +14,9 @@ from pathlib import Path
 from datetime import timedelta
 import dj_database_url
 import os
+from corsheaders.defaults import default_headers
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +34,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'web-production-d445c.up.railway.app']
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://localhost:5500']
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000', 'http://localhost:5500']
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "Access-Control-Allow-Origin: *",
+]
+
 
 # Application definition
 
