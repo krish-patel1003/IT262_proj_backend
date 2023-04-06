@@ -69,6 +69,7 @@ class LoginView(GenericAPIView):
                 response.set_cookie(
                     'refresh_token', data['refresh'], httponly=True)
                 csrf.get_token(request)
+                data["is_doctor"] = user.is_doctor
                 response.data = {
                     "Success": " Login Successfully!!", "data": data}
                 return response
