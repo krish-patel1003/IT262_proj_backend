@@ -80,6 +80,7 @@ class AppointmentViewSet(ModelViewSet):
         try:
             serializer.save()
         except Exception as e:
+            print(e)
             return Response(
                 {"error":
                  "Integrity Error, Check Constraint failed, You cannot book more than 2 weeks in advanced."},
