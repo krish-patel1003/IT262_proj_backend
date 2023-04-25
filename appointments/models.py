@@ -40,8 +40,7 @@ class Appointment(models.Model):
         constraints = [
             CheckConstraint(
                 check =  Q(date__lte = (datetime.now() + timedelta(days=14)).date()),
-                name = 'check_appointment_date_range',
-                # violation_error_message="You Cannot book appointments more in advanced than 2 weeks."
+                name = 'check_appointment_date_range'
             ),
         ]
     
