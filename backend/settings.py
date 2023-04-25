@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-!zm2q^3jyh3e!2^3(033o%9#3qk3ktl!++n6rra_*sl2xv8cje
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'web-production-d445c.up.railway.app']
+ALLOWED_HOSTS = ['127.0.0.1', 'web-production-d445c.up.railway.app', 'it262-proj-44tb.onrender.com']
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 
