@@ -71,7 +71,7 @@ class LoginView(GenericAPIView):
                 csrf.get_token(request)
                 data["is_doctor"] = user.is_doctor
                 student_profile = StudentProfile.objects.get(user=data["user_id"])
-                data["profile_id"] = student_profile 
+                data["profile_id"] = student_profile.id 
                 response.data = {
                     "Success": " Login Successfully!!", "data": data}
                 return response
