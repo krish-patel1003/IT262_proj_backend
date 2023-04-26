@@ -36,7 +36,7 @@ class Appointment(models.Model):
 
 
     class Meta:
-        ordering = ('id',)
+        ordering = ('-id', "-date")
         constraints = [
             CheckConstraint(
                 check =  Q(date__lte = (datetime.now() + timedelta(days=14)).date()),
