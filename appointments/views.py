@@ -104,6 +104,11 @@ class AppointmentViewSet(ModelViewSet):
         if to_date:
             self.queryset = self.queryset.filter(Q(date__lte=to_date))
         
+        if not request.user.is_doctor:
+            print(request.user.id)
+            student = StudentProfile.objects.get(user=request.user.id)
+            self.queryset = self.queryset.filter(student=student)
+        
         serializer = self.get_serializer(self.queryset, many=True)
         return Response({"data":serializer.data, "msg":"List of Appointments"}, status=status.HTTP_200_OK)
 
