@@ -109,6 +109,12 @@ class AppointmentViewSet(ModelViewSet):
             student = StudentProfile.objects.get(user=request.user.id)
             self.queryset = self.queryset.filter(student=student)
         
+        else:
+            rollno = request.GET.get("rollno")
+            if rollno:
+                student = StudentProfile.objects.get(rollno=rollno)
+                self.queryset = self.queryset.filter(student=student)
+        
         serializer = self.get_serializer(self.queryset, many=True)
         return Response({"data":serializer.data, "msg":"List of Appointments"}, status=status.HTTP_200_OK)
 
