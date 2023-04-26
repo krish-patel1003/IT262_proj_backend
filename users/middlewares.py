@@ -4,7 +4,7 @@ class CustomHeaderMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        response['Created-By'] = "Chris"
+        response['Created-By'] = "Krish"
         response['Access-Control-Allow-Origin'] = "*"
         response['Vary'] = "Origin"
         return response
