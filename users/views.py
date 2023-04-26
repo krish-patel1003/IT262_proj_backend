@@ -52,7 +52,7 @@ class LoginView(GenericAPIView):
         response = Response()
         email = data.get('email', None)
         password = data.get('password', None)
-        print("email = ", email, "password = ", password)
+        # print("email = ", email, "password = ", password)
         user = authenticate(email=email, password=password)
 
         if user is not None:

@@ -52,7 +52,7 @@ class AppointmentViewSet(ModelViewSet):
 
         data = request.data
         _date = parse_date(request.data["date"])
-        print("leave_dates:", get_leaves())
+        # print("leave_dates:", get_leaves())
         for leave in get_leaves():
             if date(*_date) >= leave[0] and date(*_date) <= leave[1]:
                 return Response(
@@ -61,7 +61,7 @@ class AppointmentViewSet(ModelViewSet):
         max = APPOINTMENT_SETTINGS["max_daily_limit"]
         current_day_appointments = Appointment.objects.filter(
             date=date(*_date))
-        print(current_day_appointments)
+        # print(current_day_appointments)
         # User's current booking
         user = request.user
         student = StudentProfile.objects.get(user=user)
@@ -105,7 +105,7 @@ class AppointmentViewSet(ModelViewSet):
             self.queryset = self.queryset.filter(Q(date__lte=to_date))
         
         if not request.user.is_doctor:
-            print(request.user.id)
+            # print(request.user.id)
             student = StudentProfile.objects.get(user=request.user.id)
             self.queryset = self.queryset.filter(student=student)
         
@@ -130,7 +130,7 @@ class AppointmentViewSet(ModelViewSet):
 
         if _status:
             if appointment.status == "Pending" and appointment.status != _status:  
-                print("status changing from pending to attended") 
+                # print("status changing from pending to attended") 
                 # Creating prescription
                 prescription = Prescription.objects.create()
                 serializer.initial_data["prescription_id"] = prescription.id

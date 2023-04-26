@@ -46,7 +46,7 @@ class AppointmentSerializer(ModelSerializer):
             "rollno": student_data.rollno
         }
         symptoms_list = self.generate_sypmtom_list(instance.id)
-        print(symptoms_list)
+        # print(symptoms_list)
         representation["symptoms"] = symptoms_list
         # representation["sypmtoms"] = self.generate_sypmtom_list(instance.id)
 
@@ -61,9 +61,9 @@ class AppointmentSerializer(ModelSerializer):
     def generate_sypmtom_list(self, appointment_id):
         appointment = Appointment.objects.get(id=appointment_id)
         symptoms_qs = appointment.symptoms.all()
-        print("symptoms", symptoms_qs)
+        # print("symptoms", symptoms_qs)
         symptoms = list(map(lambda i: i.name, symptoms_qs))
-        print(symptoms)
+        # print(symptoms)
         return symptoms
         # return ["test"]
 

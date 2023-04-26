@@ -28,13 +28,13 @@ class NoticeViewSet(ModelViewSet):
         
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
+        # print(request.data)
         data = request.data
         on_leave_from = date(*parse_date(data["on_leave_from"]))
         on_leave_till = date(*parse_date(data["on_leave_till"]))
         today = datetime.today().date()
 
-        print("values - >", on_leave_from, on_leave_till, today)
+        # print("values - >", on_leave_from, on_leave_till, today)
         if data["tag"] == "Leave":
             if on_leave_from == today:
                 print("Emergency Leave")

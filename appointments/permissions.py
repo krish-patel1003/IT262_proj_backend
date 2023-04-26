@@ -11,7 +11,7 @@ class SymptomPermission(BasePermission):
     def has_permission(self, request, view):
 
         if request.method == "POST":
-            print("checking post request", (request.data.keys()))
+            # print("checking post request", (request.data.keys()))
             if "is_verified" in list(request.data.keys()):
                 
                 return request.user.is_doctor
@@ -27,9 +27,9 @@ class SymptomPermission(BasePermission):
 class AppointmentPremission(BasePermission):
 
     def has_permission(self, request, view):
-        print("method", request.method)
+        # print("method", request.method)
         if request.method == "POST":
-            print("checking post request", (request.data.keys()))
+            # print("checking post request", (request.data.keys()))
             if "prescription_id" in list(request.data.keys()):
                 self.message = "prescription_id is auto added to appointment."
                 return False
@@ -44,14 +44,14 @@ class AppointmentPremission(BasePermission):
             return not request.user.is_doctor
         
         if request.method == 'PATCH':
-            print("PUT and PATCH request")
+            # print("PUT and PATCH request")
             self.message = "Only Doctors or Admin can update appointment"
             return request.user.is_doctor or request.user.is_superuser
         
         return True
 
     def has_object_permission(self, request, view, obj):
-        print("method", request.method)
+        # print("method", request.method)
 
         if request.method in SAFE_METHODS:
             return True
